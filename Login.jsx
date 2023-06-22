@@ -27,14 +27,14 @@ import {
     Extraview,
     TextLink,
     TextLinkContent
-} from './../components/styles'
+} from '../components/styles'
 import {View} from 'react-native';
 
 //Colors
-const {brand, darkLight} = Colors;
+const {brand, darkLight, tertiary} = Colors;
 
 //import { InnerContainer } from '../components/styles';
-const Login = () => {
+const Login = ({navigation}) => {
         const [hidePassword, setHidePassword] = useState(true);
     return (
         <StyledContainer>
@@ -76,13 +76,13 @@ const Login = () => {
                             
                         />
                         <MsgBox>...</MsgBox>
-                        <StyledButton onPress = {handleSubmit}>
+                        <StyledButton onPress = {() => navigation.navigate('AvailTimeInput')}>
                             <ButtonText>Login</ButtonText>
                         </StyledButton>
                         <Line />
                         <Extraview>
                             <ExtraText>Don't have an account already? </ExtraText>
-                            <TextLink>
+                            <TextLink onPress = {() => navigation.navigate('Signup')}>
                                 <TextLinkContent>Sign up</TextLinkContent>
                             </TextLink>
                         </Extraview>
@@ -96,7 +96,7 @@ const Login = () => {
 const MyTextInput = ({label, icon, isPassword, hidePassword, setHidePassword, ...props}) => {
     return (<View>
         <LeftIcon>
-            <Octicons name={icon} size = {30} color = {brand} />
+            <Octicons name={icon} size = {30} color = {tertiary} />
         </LeftIcon>
         <StyledInputLabel>{label}</StyledInputLabel>
         <StyledTextInput {...props} />
