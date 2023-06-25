@@ -28,7 +28,7 @@ import {
     TextLink,
     TextLinkContent
 } from '../components/styles'
-import {View, TouchableOpacity, ScrollView} from 'react-native';
+import {View, TouchableOpacity, ScrollView, Alert, StyleSheet, Platform} from 'react-native';
 
 //Colors
 const {brand, darkLight, tertiary} = Colors;
@@ -40,21 +40,54 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 const Signup = ({navigation}) => {
     const [hidePassword, setHidePassword] = useState(true);
     const [show, setShow] = useState(false);
-    const [date, setDate] = useState(new Date(2000, 0 , 1));
+    const [date, setDate] = useState(new Date());
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
 
+    const handlePasswordChange = text => {
+        setPassword(text);
+    };
+    
+    const handleConfirmPasswordChange = text => {
+        setConfirmPassword(text);
+    };
+
+    const handleProceed = () => {
+        if (password === confirmPassword) {
+        // Passwords match, proceed with the desired action
+        // You can add your logic here
+        Alert.alert('Success', 'Passwords matched!');
+        } else {
+        // Passwords don't match, display an error message
+        Alert.alert('Error', 'Passwords do not match. Please try again.');
+        }
+    };
     //Actual date of birth to be sent
     const[dob, setDob] = useState();
+    const [showDatePicker, setShowDatePicker] = useState(false);
+
 
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate || date;
-        setShow(false);
+        setShow(Platform.OS === 'ios'); 
         setDate(currentDate);
-        setDob(currentDate);
     }
 
-    const showDatePicker = () => {
+    const showMode = (currentMode) => {
         setShow(true);
-    }
+        setMode(currentMode);
+    };
+
+    const handleDateChange = (newDate) => {
+        setShowDatePicker(Platform.OS === 'ios');
+        setDateOfBirth(newDate);
+    };
+
+    const showDatepicker = () => {
+        showMode('date');
+      };
+
+
     return (
         <ScrollView>
             <StyledContainer>
@@ -63,16 +96,7 @@ const Signup = ({navigation}) => {
                     <PageTitle>Let's Dine!</PageTitle>
                     <SubTitle> Account Sign Up</SubTitle>
                     
-                    {show && (
-                    <DateTimePicker
-                        testID="dateTimePicker"
-                        value={date}
-                        mode= 'date'
-                        is24Hour={true}
-                        display = "default"
-                        onChange={onChange}
-                    />
-                    )}
+
 
                     <Formik
                         initialValues={{ fullName: '', email: '', dateOfBirth: '', password: '', confirmPassword: ''}}
@@ -84,7 +108,7 @@ const Signup = ({navigation}) => {
                             <MyTextInput 
                                 label="Full Name"
                                 icon = "person"
-                                placeholder = "Muhammad bin Trash"
+                                placeholder = "Kevan Leow"
                                 placeholderTextColor = {darkLight}
                                 onChangeText={handleChange('fullName')}
                                 onBlur={handleBlur('fullName')}
@@ -102,7 +126,8 @@ const Signup = ({navigation}) => {
                                 keyboardType="email-address"
                             />
 
-                            <MyTextInput 
+                            <TouchableOpacity onPress={showDatePicker}>
+                                <MyTextInput
                                 label="Date of Birth"
                                 icon = "calendar"
                                 placeholder = "DD - MM - YYYY"
@@ -114,7 +139,18 @@ const Signup = ({navigation}) => {
                                 editable = {false}
                                 showDatePicker = {showDatePicker}
                             />
+                            </TouchableOpacity>
 
+                            {show && (
+                                <DateTimePicker
+                                    testID="dateTimePicker"
+                                    value={dob}
+                                    mode= 'date'
+                                    is24Hour={true}
+                                    display = "default"
+                                    onChange={handleDateChange}
+                                />
+                                )}
                             <MyTextInput 
                                 label="Password"
                                 icon = "lock"
@@ -144,9 +180,7 @@ const Signup = ({navigation}) => {
                                 setHidePassword = {setHidePassword}
                                 
                             />
-
-                            <MsgBox>...</MsgBox>
-                            <StyledButton onPress = {() => navigation.navigate('AvailTimeInput')}>
+                            <StyledButton onPress = {() => navigation.navigate('OwnGender')}>
                                 <ButtonText>Sign Up</ButtonText>
                             </StyledButton>
                             <Line />
@@ -183,6 +217,14 @@ const MyTextInput = ({label, icon, isPassword, hidePassword, setHidePassword, is
         )}
     </View>);
     
+    const styles = StyleSheet.create({
+        datePicker: {
+            marginTop: 10,
+            width: '100%',
+          },
+        });
 };
+
+
 
 export default Signup;
