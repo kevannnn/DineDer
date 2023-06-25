@@ -3,7 +3,7 @@ import { createAppContainer } from 'react-navigation';
 import Login from './screens/Login';
 import Signup from './screens/Signup';
 import AvailTimeInput from './AvailTimeInput';
-import ProfilesListPage from './ProfilesListPage';
+import ProfilesListPage from './ProfilesListFiles/ProfilesListPage';
 
 const screens = {
   Login: {
