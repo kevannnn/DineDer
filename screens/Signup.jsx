@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import { StatusBar } from 'expo-status-bar';
+import axios from 'axios';
 
 // formik
 import {Formik} from 'formik';
@@ -28,7 +29,7 @@ import {
     TextLink,
     TextLinkContent
 } from '../components/styles'
-import {View, TouchableOpacity, ScrollView, Alert, StyleSheet, Platform} from 'react-native';
+import {View, TouchableOpacity, ScrollView} from 'react-native';
 
 //Colors
 const {brand, darkLight, tertiary} = Colors;
@@ -40,53 +41,41 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 const Signup = ({navigation}) => {
     const [hidePassword, setHidePassword] = useState(true);
     const [show, setShow] = useState(false);
-    const [date, setDate] = useState(new Date());
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
+    const [date, setDate] = useState(new Date(2000, 0 , 1));
 
-    const handlePasswordChange = text => {
-        setPassword(text);
-    };
-    
-    const handleConfirmPasswordChange = text => {
-        setConfirmPassword(text);
-    };
-
-    const handleProceed = () => {
-        if (password === confirmPassword) {
-        // Passwords match, proceed with the desired action
-        // You can add your logic here
-        Alert.alert('Success', 'Passwords matched!');
-        } else {
-        // Passwords don't match, display an error message
-        Alert.alert('Error', 'Passwords do not match. Please try again.');
-        }
-    };
     //Actual date of birth to be sent
     const[dob, setDob] = useState();
-    const [showDatePicker, setShowDatePicker] = useState(false);
-
 
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate || date;
-        setShow(Platform.OS === 'ios'); 
+        setShow(false);
         setDate(currentDate);
+        setDob(currentDate);
     }
 
-    const showMode = (currentMode) => {
+    const showDatePicker = () => {
         setShow(true);
-        setMode(currentMode);
+    }
+
+    const handleSignUp = (values, { resetForm }) => {
+        const data = {
+          username: values.fullName,
+          email: values.email,
+          password: values.password
+        };
+        
+        axios.post('http://localhost:8000/user', data)
+          .then(function(response) {
+            console.log(response.data);
+            Alert.alert('Success!', 'Welcome to dineder ' + response.data.username);
+            resetForm(); 
+            navigation.navigate('AvailTimeInput');
+        })
+        .catch(function(error) {
+          console.error(error);
+          Alert.alert('Error', 'Failed to sign up');
+        });
     };
-
-    const handleDateChange = (newDate) => {
-        setShowDatePicker(Platform.OS === 'ios');
-        setDateOfBirth(newDate);
-    };
-
-    const showDatepicker = () => {
-        showMode('date');
-      };
-
 
     return (
         <ScrollView>
@@ -96,19 +85,26 @@ const Signup = ({navigation}) => {
                     <PageTitle>Let's Dine!</PageTitle>
                     <SubTitle> Account Sign Up</SubTitle>
                     
-
+                    {show && (
+                    <DateTimePicker
+                        testID="dateTimePicker"
+                        value={date}
+                        mode= 'date'
+                        is24Hour={true}
+                        display = "default"
+                        onChange={onChange}
+                    />
+                    )}
 
                     <Formik
                         initialValues={{ fullName: '', email: '', dateOfBirth: '', password: '', confirmPassword: ''}}
-                        onSubmit={(values) => {
-                            console.log(values);
-                        }}
+                        onSubmit={handleSignUp}
                     >
                         {({handleChange, handleBlur, handleSubmit, values}) => <StyledFormArea>
                             <MyTextInput 
                                 label="Full Name"
                                 icon = "person"
-                                placeholder = "Kevan Leow"
+                                placeholder = "Muhammad bin Trash"
                                 placeholderTextColor = {darkLight}
                                 onChangeText={handleChange('fullName')}
                                 onBlur={handleBlur('fullName')}
@@ -126,8 +122,7 @@ const Signup = ({navigation}) => {
                                 keyboardType="email-address"
                             />
 
-                            <TouchableOpacity onPress={showDatePicker}>
-                                <MyTextInput
+                            <MyTextInput 
                                 label="Date of Birth"
                                 icon = "calendar"
                                 placeholder = "DD - MM - YYYY"
@@ -139,18 +134,7 @@ const Signup = ({navigation}) => {
                                 editable = {false}
                                 showDatePicker = {showDatePicker}
                             />
-                            </TouchableOpacity>
 
-                            {show && (
-                                <DateTimePicker
-                                    testID="dateTimePicker"
-                                    value={dob}
-                                    mode= 'date'
-                                    is24Hour={true}
-                                    display = "default"
-                                    onChange={handleDateChange}
-                                />
-                                )}
                             <MyTextInput 
                                 label="Password"
                                 icon = "lock"
@@ -180,7 +164,9 @@ const Signup = ({navigation}) => {
                                 setHidePassword = {setHidePassword}
                                 
                             />
-                            <StyledButton onPress = {() => navigation.navigate('OwnGender')}>
+
+                            <MsgBox>...</MsgBox>
+                            <StyledButton onPress = {handleSubmit}>
                                 <ButtonText>Sign Up</ButtonText>
                             </StyledButton>
                             <Line />
@@ -217,14 +203,6 @@ const MyTextInput = ({label, icon, isPassword, hidePassword, setHidePassword, is
         )}
     </View>);
     
-    const styles = StyleSheet.create({
-        datePicker: {
-            marginTop: 10,
-            width: '100%',
-          },
-        });
 };
-
-
 
 export default Signup;

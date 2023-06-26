@@ -31,11 +31,25 @@ import {
 import {View} from 'react-native';
 
 //Colors
-const {brand, darkLight} = Colors;
+const {brand, darkLight, tertiary} = Colors;
 
 //import { InnerContainer } from '../components/styles';
 const Login = ({navigation}) => {
-        const [hidePassword, setHidePassword] = useState(true);
+    const [hidePassword, setHidePassword] = useState(true);
+
+    const handleLogin = async (values) => {
+        try {
+          const response = await axios.get(`http://localhost:8000/user/${values.email}/${values.password}`);
+          const userID = response.data.id;
+          navigation.navigate('AvailTimeInput');
+        
+        } catch (error) {
+          console.error(error);
+          Alert.alert('Error', 'Failed to Log in');
+        }
+    };
+
+
     return (
         <StyledContainer>
             <StatusBar style= "dark" />
@@ -45,9 +59,7 @@ const Login = ({navigation}) => {
                 <SubTitle> Account Login</SubTitle>
                 <Formik
                     initialValues={{email: '', password: ''}}
-                    onSubmit={(values) => {
-                        console.log(values);
-                    }}
+                    onSubmit={handleLogin}
                 >
                     {({handleChange, handleBlur, handleSubmit, values}) => <StyledFormArea>
                         <MyTextInput 
@@ -82,7 +94,7 @@ const Login = ({navigation}) => {
                         <Line />
                         <Extraview>
                             <ExtraText>Don't have an account already? </ExtraText>
-                            <TextLink>
+                            <TextLink onPress = {handleSubmit}>
                                 <TextLinkContent>Sign up</TextLinkContent>
                             </TextLink>
                         </Extraview>
@@ -96,7 +108,7 @@ const Login = ({navigation}) => {
 const MyTextInput = ({label, icon, isPassword, hidePassword, setHidePassword, ...props}) => {
     return (<View>
         <LeftIcon>
-            <Octicons name={icon} size = {30} color = {brand} />
+            <Octicons name={icon} size = {30} color = {tertiary} />
         </LeftIcon>
         <StyledInputLabel>{label}</StyledInputLabel>
         <StyledTextInput {...props} />

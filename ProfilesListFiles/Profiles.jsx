@@ -33,6 +33,7 @@ const profiles = [
       userAge: '21',
       userFaculty: 'Engineering',
       userFavCuisine: 'Chinese',
+
       userAvailTime: new Date('2023-06-09T12:15:00'),
       userAvailTimeDisp: StringDate({time: new Date('2023-06-07T12:15:00')}),
       userBio: 'Hi, I am Maxine. Looking for friends to hand out with.',

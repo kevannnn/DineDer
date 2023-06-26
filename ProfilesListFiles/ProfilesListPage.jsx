@@ -1,6 +1,6 @@
 import { View } from 'react-native';
-import ProfileList from './ProfilesList';
-import profiles from './Profiles';
+import ProfileList from './ProfilesListFiles/ProfilesList';
+import profiles from './ProfilesListFiles/Profiles';
 
 export default function ProfilesListPage({navigation}) {
 

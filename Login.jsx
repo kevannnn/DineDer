@@ -75,8 +75,7 @@ const Login = ({navigation}) => {
                             setHidePassword = {setHidePassword}
                             
                         />
-                        <MsgBox>...</MsgBox>
-                        <StyledButton onPress = {() => navigation.navigate('AvailTimeInput')}>
+                        <StyledButton onPress = {() => navigation.navigate('MealPreference')}>
                             <ButtonText>Login</ButtonText>
                         </StyledButton>
                         <Line />
