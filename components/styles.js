@@ -13,9 +13,11 @@ export const Colors = {
     brand: "#6D28D9",
     green: "#10B981",
     red: "#EF4444",
+    rosybrown: "#BC8F8F",
+    tan: "#d2b48c"
 }
 
-const {primary, secondary, tertiary, darkLight, brand, green, red} = Colors;
+const {primary, secondary, tertiary, darkLight, brand, green, red, rosybrown, tan} = Colors;
 
 export const StyledContainer = styled.View`
     flex : 1;
@@ -31,15 +33,15 @@ export const InnerContainer = styled.View`
 `;
 
 export const PageLogo = styled.Image`
-    width: 250px
-    height: 200px;
+    width: 300px
+    height: 100px;
 `;
 
 export const PageTitle = styled.Text`
     font-size: 30px;
     text-align: center;
     font-weight: bold;
-    color: ${brand};
+    color: ${rosybrown};
     padding: 10px;
 `;
 
@@ -79,6 +81,7 @@ export const LeftIcon = styled.View`
     top: 38px;
     position: absolute;
     z-index: 1;
+    tintColor: ${brand};
 `;
 
 export const RightIcon = styled.TouchableOpacity`
@@ -90,12 +93,25 @@ export const RightIcon = styled.TouchableOpacity`
 
 export const StyledButton = styled.TouchableOpacity`
     padding: 15px;
-    background-color: ${brand};
+    background-color: ${rosybrown};
     justify-content: center;
     align-items: center;
     border-radius: 5px;
     margin-vertical: 5px;
     height: 60px;
+    margin-vertical: 10px;
+`;
+
+export const NextButton = styled.TouchableOpacity`
+    padding: 15px;
+    background-color: ${rosybrown};
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    margin-vertical: 5px;
+    height: 60px;
+    margin-vertical: 10px;
+    width: 70%
 `;
 
 export const ButtonText = styled.Text`
@@ -104,7 +120,7 @@ export const ButtonText = styled.Text`
 `;
 
 export const MsgBox = styled.Text`
-    text-align: cetner;
+    text-align: center;
     font-size: 13px;
 `;
 
@@ -135,6 +151,7 @@ export const TextLink = styled.TouchableOpacity`
 `;
 
 export const TextLinkContent = styled.Text`
-    color: ${brand};
+    color: ${rosybrown};
     font-size: 15px;
 `;
+

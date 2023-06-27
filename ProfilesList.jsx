@@ -1,3 +1,4 @@
+import React from 'react';
 import { View, Text, FlatList, Image, StyleSheet, Button, Alert } from 'react-native';
 
 const RenderItem = ({item}) => (

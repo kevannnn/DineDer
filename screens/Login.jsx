@@ -1,8 +1,6 @@
 import React, {useState} from 'react';
 import { StatusBar } from 'expo-status-bar';
-
-// formik
-import {Formik} from 'formik';
+import { Formik } from 'formik/dist';
 
 //icons
 import {Octicons, Ionicons} from '@expo/vector-icons';
@@ -29,32 +27,37 @@ import {
     TextLinkContent
 } from '../components/styles'
 import {View} from 'react-native';
+import api from '../../api';
 
 //Colors
 const {brand, darkLight, tertiary} = Colors;
 
 //import { InnerContainer } from '../components/styles';
 const Login = ({navigation}) => {
-    const [hidePassword, setHidePassword] = useState(true);
-
-    const handleLogin = async (values) => {
-        try {
-          const response = await axios.get(`http://localhost:8000/user/${values.email}/${values.password}`);
-          const userID = response.data.id;
-          navigation.navigate('AvailTimeInput');
+        const [hidePassword, setHidePassword] = useState(true);
         
-        } catch (error) {
-          console.error(error);
-          Alert.alert('Error', 'Failed to Log in');
-        }
-    };
-
+        const handleLogin = async (values) => {
+            console.log(values)
+            console.log('Email:', values.email);
+            console.log('Password:', values.password);
+            try {
+                const response = await api.get(`/user/${values.email}/${values.password}`);
+                // const userID = response.data.id;
+                // console.log(response)
+                // console.log(userID)
+                navigation.navigate('MealPreference');
+    
+            } catch (error) {
+                console.error(error);
+                Alert.alert('Error', 'Failed to Log in');
+            }
+        };
 
     return (
         <StyledContainer>
             <StatusBar style= "dark" />
             <InnerContainer>
-                <PageLogo resizeMode = "cover" source={require('./../assets/dineder.png')} />
+                <PageLogo resizeMode = "cover" source={require('../../assets/dinder.png')} />
                 <PageTitle>Let's Dine!</PageTitle>
                 <SubTitle> Account Login</SubTitle>
                 <Formik
@@ -87,14 +90,13 @@ const Login = ({navigation}) => {
                             setHidePassword = {setHidePassword}
                             
                         />
-                        <MsgBox>...</MsgBox>
-                        <StyledButton onPress = {() => navigation.navigate('AvailTimeInput')}>
+                        <StyledButton onPress = {handleSubmit}>
                             <ButtonText>Login</ButtonText>
                         </StyledButton>
                         <Line />
                         <Extraview>
                             <ExtraText>Don't have an account already? </ExtraText>
-                            <TextLink onPress = {handleSubmit}>
+                            <TextLink onPress = {() => navigation.navigate('Signup')}>
                                 <TextLinkContent>Sign up</TextLinkContent>
                             </TextLink>
                         </Extraview>
